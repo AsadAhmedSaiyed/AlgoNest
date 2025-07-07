@@ -19,7 +19,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://algo-nest.vercel.app/", "https://algonest-dashboard.vercel.app/"],
+    origin: ["https://algo-nest.vercel.app", "https://algonest-dashboard.vercel.app"],
     credentials: true,
   })
 );
