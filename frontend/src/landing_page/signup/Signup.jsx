@@ -28,7 +28,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "http://localhost:3002/signup",
+        "https://algonest.onrender.com/signup",
         { ...inputValue },
         { withCredentials: true }
       );
@@ -37,7 +37,7 @@ const Signup = () => {
       if (success) {
         handleSuccess(message);
         localStorage.setItem("user", JSON.stringify(user));
-        window.location.href = `http://localhost:3000/dashboard/${user._id}`;
+        window.location.href = `https://algonest-dashboard.vercel.app/dashboard/${user._id}`;
       } else {
         handleError(message);
       }

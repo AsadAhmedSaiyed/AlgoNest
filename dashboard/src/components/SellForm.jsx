@@ -38,12 +38,12 @@ function SellForm({
     console.time("sell");
     setIsLoading(true);
     try {
-      await axios.post(`http://localhost:3002/${id}/newOrder`, order);
+      await axios.post(`https://algonest.onrender.com/${id}/newOrder`, order);
 
       const [ordersRes, holdingsRes, res] = await Promise.all([
-        axios.get(`http://localhost:3002/${id}/allOrders`),
-        axios.get(`http://localhost:3002/dashboard/${id}/allHoldings`),
-        axios.get(`http://localhost:3002/user/${id}/summary`),
+        axios.get(`https://algonest.onrender.com/${id}/allOrders`),
+        axios.get(`https://algonest.onrender.com/dashboard/${id}/allHoldings`),
+        axios.get(`https://algonest.onrender.com/user/${id}/summary`),
       ]);
 
       setAllOrders(ordersRes.data);

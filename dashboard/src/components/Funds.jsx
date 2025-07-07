@@ -7,7 +7,7 @@ const Funds = ({ id }) => {
 
   const handleSubmit = async () => {
     try {
-      const res = await axios.post(`http://localhost:3002/user/${id}/funds`, {
+      const res = await axios.post(`https://algonest.onrender.com/user/${id}/funds`, {
         type,
         amount: parseFloat(amount),
       });

@@ -6,7 +6,7 @@ import "../index.css";
 const Holdings = ({ id, allHoldings, setAllHoldings, summary }) => {
   useEffect(() => {
     axios
-      .get(`http://localhost:3002/dashboard/${id}/allHoldings`)
+      .get(`https://algonest.onrender.com/dashboard/${id}/allHoldings`)
       .then((res) => {
         setAllHoldings(res.data);
       });

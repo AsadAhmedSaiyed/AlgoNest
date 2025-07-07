@@ -22,7 +22,7 @@ function UserMenu() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:3002/user/${id}`);
+        const res = await axios.get(`https://algonest.onrender.com/user/${id}`);
         if (res.data.user) {
           setUser(res.data.user);
         }
@@ -44,12 +44,12 @@ function UserMenu() {
   const handleLogout = async () => {
     handleCloseUserMenu();
     try {
-      await axios.post("http://localhost:3002/logout", null, {
+      await axios.post("https://algonest.onrender.com/logout", null, {
         withCredentials: true,
       });
 
       localStorage.clear();
-      window.location.href = "http://localhost:5173/login";
+      window.location.href = "https://algo-nest.vercel.app/login";
     } catch (err) {
       console.error("Logout failed:", err);
     }

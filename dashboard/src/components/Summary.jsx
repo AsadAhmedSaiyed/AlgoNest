@@ -5,7 +5,7 @@ const Summary = ({ id, user, setUser, summary, setSummary }) => {
   useEffect(() => {
     const fetchSummary = async () => {
       try {
-        const res = await axios.get(`http://localhost:3002/user/${id}/summary`);
+        const res = await axios.get(`https://algonest.onrender.com/user/${id}/summary`);
         setUser(res.data.user);
         setSummary(res.data.summary);
       } catch (err) {

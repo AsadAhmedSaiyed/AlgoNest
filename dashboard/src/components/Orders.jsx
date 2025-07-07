@@ -4,7 +4,7 @@ import { useEffect } from "react";
 const Orders = ({ id, allOrders, setAllOrders }) => {
   useEffect(() => {
     axios
-      .get(`http://localhost:3002/${id}/allOrders`)
+      .get(`https://algonest.onrender.com/${id}/allOrders`)
       .then((res) => setAllOrders(res.data))
       .catch((err) => console.error("Order fetch error:", err));
   }, [id]);
