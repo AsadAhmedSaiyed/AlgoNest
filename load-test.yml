@@ -1,0 +1,42 @@
+config:
+  target: "http://localhost:3002"
+  phases:
+    - duration: 60
+      arrivalCount: 1000  # Simulate 1000 users in total (burst)
+
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Test all routes for one user"
+    flow:
+      - get:
+          url: "/user/686a104848a3d7612ca15558"
+
+      - post:
+          url: "/user/686a104848a3d7612ca15558/funds"
+          json:
+            type: "add"
+            amount: 1000
+
+      - get:
+          url: "/dashboard/686a104848a3d7612ca15558/allHoldings"
+
+      - get:
+          url: "/dashboard/686a104848a3d7612ca15558/watchlist"
+
+      - post:
+          url: "/686a104848a3d7612ca15558/newOrder"
+          json:
+            userId: "686a104848a3d7612ca15558"
+            name: "TCS"
+            qty: 1
+            price: 100
+            mode: "BUY"
+
+      - get:
+          url: "/686a104848a3d7612ca15558/allOrders"
+
+      - get:
+          url: "/user/686a104848a3d7612ca15558/summary"
