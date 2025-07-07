@@ -44,7 +44,7 @@ function BuyForm({
         try {
           const [ordersRes, holdingsRes, res] = await Promise.all([
             axios.get(`https://algonest.onrender.com/${id}/allOrders`),
-            axios.get(`https://algonest.onrender.com/${id}/allHoldings`),
+            axios.get(`https://algonest.onrender.com/dashboard/${id}/allHoldings`),
             axios.get(`https://algonest.onrender.com/user/${id}/summary`),
           ]);
           setAllOrders(ordersRes.data);
