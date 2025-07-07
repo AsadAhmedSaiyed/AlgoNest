@@ -7,11 +7,9 @@ const { UsersModel } = require("./model/UsersModel");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const axios = require("axios");
-//connecting db
 const mongoose = require("mongoose");
 const PORT = process.env.PORT || 3002;
 const url = process.env.MONGO_URL;
-const bodyParser = require("body-parser");
 const cors = require("cors");
 
 const app = express();
@@ -19,7 +17,10 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://algo-nest.vercel.app", "https://algonest-dashboard.vercel.app"],
+    origin: [
+      "https://algo-nest.vercel.app",
+      "https://algonest-dashboard.vercel.app",
+    ],
     credentials: true,
   })
 );
@@ -32,7 +33,7 @@ app.post("/signup", Signup);
 app.post("/login", Login);
 
 app.post("/logout", (req, res) => {
-  res.clearCookie("token", { path: "/" }); // Clear JWT cookie
+  res.clearCookie("token", { path: "/" });
   res.status(200).json({ message: "Logged out successfully" });
 });
 
@@ -54,10 +55,10 @@ app.post("/user/:id/funds", async (req, res) => {
 
   if (!user) return res.status(404).json({ message: "User not found" });
 
-  if ((type == "add")) {
+  if (type === "add") {
     user.initialBalance += amount;
     user.finalBalance += amount;
-  } else if (type == "withdraw") {
+  } else if (type === "withdraw") {
     if (user.finalBalance < amount) {
       return res.status(400).json({ message: "Insufficient balance" });
     }
@@ -104,7 +105,7 @@ async function fetchWatchlistData() {
       }
     })
   );
-   cache = results.filter((item) => item !== null);
+  cache = results.filter((item) => item !== null);
   cacheTime = Date.now();
   console.timeEnd("fetch-stocks");
 }
@@ -117,24 +118,27 @@ app.get("/dashboard/:id/watchlist", async (req, res) => {
 });
 
 app.post("/:id/newOrder", async (req, res) => {
-  let id = req.params.id;
+  const id = req.params.id;
   const cost = req.body.qty * req.body.price;
-  const user = await UsersModel.findById(id);
 
-  if (req.body.mode == "BUY") {
+  if (req.body.mode === "BUY") {
+    const user = await UsersModel.findById(id);
     if (user.finalBalance < cost) {
       return res.status(400).json({ message: "Insufficient balance" });
     }
-    user.finalBalance -= cost;
 
-    let newOrder = new OrdersModel({
+    await UsersModel.findByIdAndUpdate(id, {
+      $inc: { finalBalance: -cost },
+    });
+
+    const newOrder = new OrdersModel({
       userId: id,
       name: req.body.name,
       qty: req.body.qty,
       price: req.body.price,
       mode: req.body.mode,
     });
-    
+
     const price = req.body.price;
     const fluctuation = (Math.random() * 5 - 2) / 100;
     const avg = +(price * (1 + fluctuation)).toFixed(2);
@@ -154,14 +158,18 @@ app.post("/:id/newOrder", async (req, res) => {
       net: net,
       day: day,
     });
-    await Promise.all([user.save(), newOrder.save(), newHolding.save()]);
 
-    res.json({ message: "success" });
+    await Promise.all([newOrder.save(), newHolding.save()]);
+    return res.json({ message: "success" });
   }
-  if (req.body.mode == "SELL") {
+
+  if (req.body.mode === "SELL") {
     const earnings = req.body.qty * req.body.price;
-    user.finalBalance += earnings;
-    await user.save();
+
+    await UsersModel.findByIdAndUpdate(id, {
+      $inc: { finalBalance: earnings },
+    });
+
     const epsilon = 0.01;
     const holding = await HoldingsModel.findOne({
       userId: id,
@@ -169,21 +177,24 @@ app.post("/:id/newOrder", async (req, res) => {
       price: { $gte: req.body.price - epsilon, $lte: req.body.price + epsilon },
       qty: req.body.qty,
     });
+
     if (holding) {
-      let newOrder = new OrdersModel({
+      const newOrder = new OrdersModel({
         userId: id,
         name: req.body.name,
         qty: req.body.qty,
         price: req.body.price,
         mode: req.body.mode,
       });
+
       await newOrder.save();
       await HoldingsModel.deleteOne({
         userId: id,
         name: req.body.name,
         price: req.body.price,
       });
-      res.status(200).json({ message: "Holding deleted successfully" });
+
+      return res.status(200).json({ message: "Holding deleted successfully" });
     } else {
       return res
         .status(404)
@@ -207,7 +218,7 @@ app.get("/user/:id/summary", async (req, res) => {
   const plPercent = investment === 0 ? 0 : ((pl / investment) * 100).toFixed(2);
   res.json({
     user: {
-      username:user.username,
+      username: user.username,
       initialBalance: user.initialBalance,
       finalBalance: user.finalBalance,
     },
