@@ -6,16 +6,19 @@ const UsersSchema = new Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  initialBalance:{
-    type:Number,
+  initialBalance: {
+    type: Number,
   },
-  finalBalance:{
-    type:Number,
-  }
+  finalBalance: {
+    type: Number,
+  },
 });
 
-UsersSchema.pre("save", async function () {
+UsersSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next(); 
   this.password = await bcrypt.hash(this.password, 12);
+  next();
 });
 
 module.exports = { UsersSchema };
+
