@@ -30,10 +30,14 @@ module.exports.Login = async (req, res, next) => {
       return res.json({message:'All fields are required'})
     }
     const user = await UsersModel.findOne({ email });
+    console.log("User : ", user);
+    console.log("email : ", user.email);
     if(!user){
       return res.json({message:'Incorrect  email' }) 
     }
-    const auth = await bcrypt.compare(password,user.password)
+    const auth = await bcrypt.compare(password,user.password);
+    console.log("db pass : ",password);
+    console.log("userPass : ", user.password);
     if (!auth) {
       return res.json({message:'Incorrect password' }) 
     }
