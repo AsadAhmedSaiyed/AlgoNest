@@ -33,7 +33,7 @@ module.exports.Login = async (req, res, next) => {
     console.log("User : ", user);
     console.log("email : ", user.email);
     if(!user){
-      return res.json({message:'Incorrect  email' }) 
+      return res.json({message:'Incorrect email' }) 
     }
     const auth = await bcrypt.compare(password,user.password);
     console.log("db pass : ",password);
