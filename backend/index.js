@@ -24,6 +24,15 @@ app.use(
     credentials: true,
   })
 );
+
+app.options("*", cors({
+  origin: [
+    "https://algo-nest.vercel.app",
+    "https://algonest-dashboard.vercel.app",
+  ],
+  credentials: true,
+}));
+
 app.use(express.json());
 
 let cache = null;
