@@ -37,13 +37,13 @@ function BuyForm({
     setIsLoading(true);
     try {
       console.time("Buy");
-      await axios.post(`https://algonest.onrender.com/${id}/newOrder`, order);
+      await axios.post(`https://algonest.onrender.com/user/${id}/newOrder`, order);
       onClose();
       console.timeEnd("Buy");
       startTransition(async () => {
         try {
           const [ordersRes, holdingsRes, res] = await Promise.all([
-            axios.get(`https://algonest.onrender.com/${id}/allOrders`),
+            axios.get(`https://algonest.onrender.com/user/${id}/allOrders`),
             axios.get(`https://algonest.onrender.com/dashboard/${id}/allHoldings`),
             axios.get(`https://algonest.onrender.com/user/${id}/summary`),
           ]);

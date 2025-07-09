@@ -41,7 +41,7 @@ function SellForm({
       await axios.post(`https://algonest.onrender.com/${id}/newOrder`, order);
 
       const [ordersRes, holdingsRes, res] = await Promise.all([
-        axios.get(`https://algonest.onrender.com/${id}/allOrders`),
+        axios.get(`https://algonest.onrender.com/user/${id}/allOrders`),
         axios.get(`https://algonest.onrender.com/dashboard/${id}/allHoldings`),
         axios.get(`https://algonest.onrender.com/user/${id}/summary`),
       ]);
