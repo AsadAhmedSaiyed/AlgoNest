@@ -258,3 +258,9 @@ async function connectToDb() {
 }
 
 connectToDb();
+
+app._router.stack
+  .filter(r => r.route)
+  .forEach(r => {
+    console.log("[ROUTE]", r.route.stack[0].method.toUpperCase(), r.route.path);
+  });
