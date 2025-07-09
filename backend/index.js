@@ -126,7 +126,7 @@ app.get("/dashboard/:id/watchlist", async (req, res) => {
   res.json(cache);
 });
 
-app.post("user/:id/newOrder", async (req, res) => {
+app.post("/user/:id/newOrder", async (req, res) => {
   const id = req.params.id;
   const cost = req.body.qty * req.body.price;
 
@@ -212,7 +212,7 @@ app.post("user/:id/newOrder", async (req, res) => {
   }
 });
 
-app.get("user/:id/allOrders", async (req, res) => {
+app.get("/user/:id/allOrders", async (req, res) => {
   const id = req.params.id;
   let allOrders = await OrdersModel.find({ userId: id }).lean();
   res.json(allOrders);
